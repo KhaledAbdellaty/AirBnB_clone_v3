@@ -50,7 +50,8 @@ def post_city(state_id):
     if state is None:
         abort(404)
     req = request.get_json()
-    city = City(state_id=state_id, name=req["name"])
+    req["state_id"] = state_id
+    city = City(**req)
 
     storage.new(city)
     storage.save()
