@@ -64,8 +64,8 @@ def put_state(state_id):
 
     for k in state.to_dict():
         for rk in req:
-            if k == rk:
+            if rk not in ['id', 'created_at', 'updated_at']:
                 state.__setattr__(str(rk), req[rk])
                 break
-    storage.save()
-    return jsonify(state.to_dict()), 201
+    state.sa
+    return jsonify(state.to_dict()), 200
