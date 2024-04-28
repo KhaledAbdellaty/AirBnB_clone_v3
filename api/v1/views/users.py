@@ -40,8 +40,10 @@ def post_user():
     """Method that create User record."""
     if not request.is_json:
         abort(400, description="Not a JSON")
-    elif "name" not in request.json:
-        abort(400, description="Missing Name")
+    elif "email" not in request.json:
+        abort(400, description="Missing email")
+    elif "password" not in request.json:
+        abort(400, description="Missing password")
 
     req = request.get_json()
     user = User(**req)
@@ -55,8 +57,6 @@ def put_user(user_id):
     """Method that update User record by id."""
     if not request.is_json:
         abort(400, description="Not a JSON")
-    elif "name" not in request.json:
-        abort(400, description="Missing Name")
 
     req = request.get_json()
     user = storage.get(User, user_id)
