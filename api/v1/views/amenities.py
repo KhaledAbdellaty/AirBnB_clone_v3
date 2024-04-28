@@ -61,10 +61,9 @@ def put_amenity(amenity_id):
     if amenity is None:
         abort(404)
 
-    for k in amenity.to_dict():
-        for rk in req:
-            if k == rk:
-                amenity.__setattr__(str(rk), req[rk])
-                break
+    for k in req:
+        if k not in ["id", "created_at", "updated_at"]:
+            amenity.__setattr__(str(k), req[k])
+
     storage.save()
-    return jsonify(amenity.to_dict()), 201
+    return jsonify(amenity.to_dict()), 200

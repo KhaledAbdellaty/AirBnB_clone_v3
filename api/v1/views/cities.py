@@ -72,7 +72,7 @@ def put_city(city_id):
         abort(404)
 
     for k in req:
-        if k not in ["id", "created_at", "updated_at"]:
+        if k not in ["id", "state_id", "created_at", "updated_at"]:
             city.__setattr__(str(k), req[k])
 
     storage.save()
