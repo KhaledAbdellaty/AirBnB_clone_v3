@@ -54,7 +54,8 @@ def post_place(city_id):
     user = storage.get(User, req['user_id'])
     if city is None or user is None:
         abort(404)
-    place = Place(name=req["name"], city_id=city_id)
+    req["city_id"] = city_id
+    place = Place(**req)
     storage.new(place)
     storage.save()
     return jsonify(place.to_dict()), 201
