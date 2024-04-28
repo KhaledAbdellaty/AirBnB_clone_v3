@@ -12,11 +12,11 @@ from models.user import User
 @app_views.route('/places/<place_id>/reviews')
 def get_all_reviews(place_id):
     """Method that fetch all Reviews resources."""
-    arr_reviews = [review.to_dict() for review in
-                   storage.all(Review).values() if place_id == review.place_id]
-    if len(arr_reviews) == 0:
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
-    return jsonify(arr_reviews)
+    reviews = [review.to_dict() for review in place.reviews]
+    return jsonify(reviews)
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET'])
@@ -54,8 +54,8 @@ def post_review(place_id):
     user = storage.get(User, req['user_id'])
     if place is None or user is None:
         abort(404)
-    review = Review(text=req["text"],
-                    place_id=place_id, user_id=req['user_id'])
+    req["place_id"] = place_id
+    review = Review(**req)
     storage.new(review)
     storage.save()
     return jsonify(review.to_dict()), 201
@@ -72,9 +72,9 @@ def put_review(review_id):
     if review is None:
         abort(404)
 
-    for rk in req:
+    for k in req:
         if k not in ['id', 'user_id', 'place_id',
                      'created_at', 'updated_at']:
-            review.__setattr__(str(rk), req[rk])
+            review.__setattr__(str(k), req[k])
     storage.save()
     return jsonify(review.to_dict()), 200
