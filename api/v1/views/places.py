@@ -73,5 +73,5 @@ def put_place(place_id):
     for key in req:
         if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             place.__setattr__(str(key), req[key])
-        storage.save()
+    storage.save()
     return jsonify(place.to_dict()), 200
