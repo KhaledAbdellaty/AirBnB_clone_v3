@@ -12,11 +12,11 @@ from models.user import User
 @app_views.route('/cities/<city_id>/places', methods=['GET'])
 def get_all_places(city_id):
     """Method that fetch all Places resources."""
-    arr_places = [places.to_dict() for places in storage.all(Place).values()
-                  if city_id == places.city_id]
-    if len(arr_places) == 0:
+    city = storage.get(City, city_id)
+    if city is None:
         abort(404)
-    return jsonify(arr_places)
+    places = [place.to_dict() for place in city.places]
+    return jsonify(places)
 
 
 @app_views.route('/places/<place_id>', methods=['GET'])
@@ -54,7 +54,7 @@ def post_place(city_id):
     user = storage.get(User, req['user_id'])
     if city is None or user is None:
         abort(404)
-    place = Place(name=req["name"], city_id=city_id, user_id=req['user_id'])
+    place = Place(name=req["name"], city_id=city_id)
     storage.new(place)
     storage.save()
     return jsonify(place.to_dict()), 201
