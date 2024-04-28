@@ -62,11 +62,11 @@ def put_user(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    for k in user.to_dict():
-        for rk in req:
-            if k == rk:
-                user.__setattr__(str(rk), req[rk])
-                break
+
+    for key in req:
+        if key not in ['id', 'email', 'created_at', 'updated_at']:
+            user.__setattr__(str(key), req[key])
+
 
     storage.save()
-    return jsonify(user.to_dict()), 201
+    return jsonify(user.to_dict()), 200
