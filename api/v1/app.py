@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Entry point for HolbertonBnB API calls."""
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from models import storage
