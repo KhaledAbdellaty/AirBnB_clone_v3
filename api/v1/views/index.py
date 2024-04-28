@@ -24,8 +24,9 @@ def get_stats():
     Returns:
         JSON object with the number of objects by type."""
     classes = {
-           "amenities":"Amenity", "cities":"City",
-          "places" :"Place", "reviews":"Review", "states":"State", "users":"User",
+           "amenities": "Amenity", "cities": "City",
+           "places": "Place", "reviews": "Review",
+           "states": "State", "users": "User",
     }
 
     dic = {}
