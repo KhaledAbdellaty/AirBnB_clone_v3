@@ -70,10 +70,9 @@ def put_city(city_id):
     if city is None:
         abort(404)
 
-    for k in city.to_dict():
-        for rk in req:
-            if k == rk:
-                city.__setattr__(str(rk), req[rk])
-                break
+    for k in req:
+        if k not in ["id", "created_at", "updated_at"]:
+            city.__setattr__(str(k), req[k])
+
     storage.save()
-    return jsonify(city.to_dict()), 201
+    return jsonify(city.to_dict()), 200
