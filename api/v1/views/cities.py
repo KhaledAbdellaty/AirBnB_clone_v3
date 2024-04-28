@@ -11,11 +11,12 @@ from models.state import State
 @app_views.route('/states/<state_id>/cities', methods=['GET'])
 def get_all_cities(state_id):
     """Method that fetch all cities resources."""
-    arr_cities = [city.to_dict() for city in storage.all(City).values()
-                  if state_id == city.state_id]
-    if len(arr_cities) == 0:
+    state = storage.get(State, state_id)
+    if state is None:
         abort(404)
-    return jsonify(arr_cities)
+
+    list_of_cities = [city.to_dict() for city in state.cities]
+    return jsonify(list_of_cities)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'])
@@ -50,8 +51,9 @@ def post_city(state_id):
     if state is None:
         abort(404)
     req = request.get_json()
-    city = City(state_id=state_id, name=req["name"])
 
+    city = City(state_id=state_id, name=req["name"])
+    print(city.to_dict())
     storage.new(city)
     storage.save()
     return jsonify(city.to_dict()), 201
