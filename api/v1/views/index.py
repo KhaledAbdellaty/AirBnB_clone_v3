@@ -23,15 +23,12 @@ def get_stats():
 
     Returns:
         JSON object with the number of objects by type."""
-    classes = [
-           "Amenity", "City",
-           "Place", "Review", "State", "User",
-    ]
+    classes = {
+           "amenities":"Amenity", "cities":"City",
+          "places" :"Place", "reviews":"Review", "states":"State", "users":"User",
+    }
 
     dic = {}
-    for cls_name in classes:
-        key = cls_name
-
-        dic[key.lower()] = storage.count(key)
-
+    for key in classes:
+        dic[key] = storage.count(classes[key])
     return dic
