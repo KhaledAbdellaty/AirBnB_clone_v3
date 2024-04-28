@@ -70,10 +70,8 @@ def put_place(place_id):
     if place is None:
         abort(404)
 
-    for k in place.to_dict():
-        for rk in req:
-            if k == rk:
-                place.__setattr__(str(rk), req[rk])
-                break
-    storage.save()
+    for key in req:
+        if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
+            place.__setattr__(str(key), req[key])
+        storage.save()
     return jsonify(place.to_dict()), 201

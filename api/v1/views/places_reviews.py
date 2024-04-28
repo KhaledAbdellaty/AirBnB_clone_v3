@@ -72,10 +72,9 @@ def put_review(review_id):
     if review is None:
         abort(404)
 
-    for k in review.to_dict():
-        for rk in req:
-            if k == rk:
-                review.__setattr__(str(rk), req[rk])
-                break
+    for rk in req:
+        if k not in ['id', 'user_id', 'place_id',
+                     'created_at', 'updated_at']:
+            review.__setattr__(str(rk), req[rk])
     storage.save()
-    return jsonify(review.to_dict()), 201
+    return jsonify(review.to_dict()), 200

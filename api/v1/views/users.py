@@ -44,7 +44,7 @@ def post_user():
         abort(400, description="Missing Name")
 
     req = request.get_json()
-    user = User(name=req["name"])
+    user = User(**req)
     storage.new(user)
     storage.save()
     return jsonify(user.to_dict()), 201
@@ -66,7 +66,6 @@ def put_user(user_id):
     for key in req:
         if key not in ['id', 'email', 'created_at', 'updated_at']:
             user.__setattr__(str(key), req[key])
-
 
     storage.save()
     return jsonify(user.to_dict()), 200
