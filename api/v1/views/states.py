@@ -43,7 +43,7 @@ def post_state():
         abort(400, description="Missing Name")
 
     req = request.get_json()
-    state = State(name=req["name"])
+    state = State(**req)
     storage.new(state)
     storage.save()
     return jsonify(state.to_dict()), 201
@@ -67,5 +67,5 @@ def put_state(state_id):
             if rk not in ['id', 'created_at', 'updated_at']:
                 state.__setattr__(str(rk), req[rk])
                 break
-    state.sa
+    storage.save()
     return jsonify(state.to_dict()), 200
