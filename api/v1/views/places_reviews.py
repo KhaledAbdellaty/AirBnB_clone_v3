@@ -68,7 +68,7 @@ def put_review(review_id):
         abort(400, description="Not a JSON")
 
     req = request.get_json()
-    review = storage.get(review, review_id)
+    review = storage.get(Place, review_id)
     if review is None:
         abort(404)
 
