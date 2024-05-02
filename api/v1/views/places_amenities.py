@@ -39,15 +39,16 @@ def delete_amenity(place_id, amentiy_id):
 @app_views.route('/places/<place_id>/amenities/<amenity_id>', methods=['POST'])
 def link_place_amenity(place_id, amenity_id):
     """Addes an Amenity object from a place based on id."""
-    place = storage.get("Place", place_id)
-    amentiy = storage.get("Amentiy", amenity_id)
-    if place is None:
-        abort(404)
-    if amentiy is None:
-        abort(404)
-    if amentiy in place.amenities:
-        return jsonify(amentiy.to_dict()) 200
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            if amenity in place.amenities:
+                exists = True
+            else:
+                place.amenities.append(amenity)
+        else:
+            if amenity.id in place.amenity_ids:
+                exists = True
+            else:
+                place.amenity_ids.append(amenity.id)
 
-    place.amenities.append(amenity)
-    storage.save()
-    return jsonify(amenity.to_dict()), 201
+        place.save()
+        return jsonify(amenity.to_dict()), 201
