@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """Defines the view for places amenities Api calls"""
-from flask import abort, jsonify, request
 import os
+from flask import abort, jsonify, request
 from models import storage
 from models.amenity import Amenity
+from models.place import Place
 from api.v1.views import app_views
 
 
