@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines the view for places amenities Api calls"""
 from flask import abort, jsonify, request
-from flasgger import swag_from
+import os
 from models import storage
 from models.amenity import Amenity
 from api.v1.views import app_views
@@ -23,17 +23,15 @@ def get_place_amenities(place_id):
                  methods=['DELETE'])
 def delete_amenity(place_id, amentiy_id):
     """remote an Amenity object from a place based on id."""
-    place = storage.get("Place", place_id)
-    amentiy = storage.get("Amentiy", amentiy_id)
-    if place is None:
-        abort(404)
-    if amentiy is None:
-        abort(404)
-    if amentiy not in place.amenities:
-        abort(404)
-
-    place.amenities.remove(amenity)
-    storage.save()
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        if amenity not in place.amenities:
+            abort(404)
+        place.amenities.remove(amenity)
+    else:
+        if amenity.id not in place.amenity_ids:
+            abort(404)
+        place.amenity_ids.remove(amenity.id)
+    place.save()
     return jsonify({}), 200
 
 
